@@ -6,6 +6,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/DeekshaHarish12/MyMavenPracticeAutomation.git'
@@ -14,29 +15,22 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('Run Selenium Test') {
-            steps {
-                sh '''
-                echo "Listing target folder..."
-                ls -l target
-
-                echo "Running Selenium Test..."
-                java -cp target/MyMavenPracticeAutomationApp-1.0-SNAPSHOT.jar com.example.App
-                '''
+                sh 'mvn clean test'
             }
         }
     }
 
     post {
-        success {
-            echo 'Build and Selenium test successful!'
+        always {
+            junit '**/target/surefire-reports/*.xml'
         }
+
+        success {
+            echo 'Build and Selenium tests successful!'
+        }
+
         failure {
-            echo 'Build or test failed!'
+            echo 'Build or tests failed!'
         }
     }
 }
