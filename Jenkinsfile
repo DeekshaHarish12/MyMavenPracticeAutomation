@@ -18,25 +18,25 @@ pipeline {
             }
         }
 
-        stage('Show Build Output') {
+        stage('Run Selenium Test') {
             steps {
-                sh 'ls -l target'
-            }
-        }
+                sh '''
+                echo "Listing target folder..."
+                ls -l target
 
-        stage('Run Application') {
-            steps {
-                sh 'java -cp target/MyMavenPracticeAutomationApp-1.0-SNAPSHOT.jar com.example.App'
+                echo "Running Selenium Test..."
+                java -cp target/MyMavenPracticeAutomationApp-1.0-SNAPSHOT.jar com.example.App
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Build and execution successful!'
+            echo 'Build and Selenium test successful!'
         }
         failure {
-            echo 'Build failed!'
+            echo 'Build or test failed!'
         }
     }
 }
