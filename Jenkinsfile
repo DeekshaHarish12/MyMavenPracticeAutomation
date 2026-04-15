@@ -18,16 +18,22 @@ pipeline {
             }
         }
 
+        stage('Show Build Output') {
+            steps {
+                sh 'ls -l target'
+            }
+        }
+
         stage('Run Application') {
             steps {
-                sh 'java -jar target/MyMavenPracticeAutomationApp-1.0-SNAPSHOT.jar'
+                sh 'java -cp target/MyMavenPracticeAutomationApp-1.0-SNAPSHOT.jar com.example.App'
             }
         }
     }
 
     post {
         success {
-            echo 'Build and deployment successful!'
+            echo 'Build and execution successful!'
         }
         failure {
             echo 'Build failed!'
